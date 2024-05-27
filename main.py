@@ -10,7 +10,7 @@ data = pd.read_excel('TESTE PYTHON.xlsm')
 data['Tempo decorrido'] = pd.to_timedelta(data['Tempo decorrido'].astype(str))
 
 # Renomear colunas para facilitar o acesso (verifique se a planilha possui exatamente estas colunas)
-data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Sexo', 'Tempo decorrido', 'Modalidade', 'Imagem do Atleta']
+data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Sexo', 'Tempo decorrido', 'Modalidade']
 
 st.title("Trinavy - Simulado de Natação")
 
@@ -110,13 +110,11 @@ card_style = """
         margin-bottom: 10px;
         border-radius: 5px;
         color: #ffffff;
+        width: calc(100% - 20px);
         display: flex;
-        align-items: center;
-        justify-content: flex-start;
-    }
-    .card img {
-        border-radius: 50%;
-        margin-right: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
     }
     .card h4 {
         color: #ffcd21;
@@ -128,8 +126,7 @@ card_style = """
     }
     @media (max-width: 600px) {
         .card {
-            flex-direction: column;
-            align-items: flex-start;
+            width: calc(100% - 20px);
         }
     }
     </style>
@@ -140,13 +137,13 @@ st.markdown('<div class="card-container">', unsafe_allow_html=True)
 for index, row in filtered_data.iterrows():
     tempo_formatado = str(row['Tempo decorrido']).split()[-1] if pd.notna(row['Tempo decorrido']) else "Tempo inválido"
     st.markdown(f"""
-            <h4>Nome: {row['Nome do Atleta']}</h4>
-            <p><strong>Classificação:</strong> {row['Classificação']}</p>
-            <p><strong>Categoria:</strong> {row['Categoria']}</p>
-            <p><strong>Sexo:</strong> {row['Sexo']}</p>
-            <p><strong>Tempo decorrido:</strong> {tempo_formatado}</p>
-            <p><strong>Modalidade:</strong> {row['Modalidade']}</p>
-        </div>
+    <div class="card">
+        <h4>Nome: {row['Nome do Atleta']}</h4>
+        <p><strong>Classificação:</strong> {row['Classificação']}</p>
+        <p><strong>Categoria:</strong> {row['Categoria']}</p>
+        <p><strong>Sexo:</strong> {row['Sexo']}</p>
+        <p><strong>Tempo decorrido:</strong> {tempo_formatado}</p>
+        <p><strong>Modalidade:</strong> {row['Modalidade']}</p>
     </div>
     """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
