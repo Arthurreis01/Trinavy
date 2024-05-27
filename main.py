@@ -15,7 +15,7 @@ data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Se
 st.title("Trinavy - Simulado de Natação")
 
 # Filtros no sidebar
-st.sidebar.image("logobg.ng.png")
+st.sidebar.image("logobg.png.png")
 modalidade = st.sidebar.selectbox("Modalidade", list(data['Modalidade'].unique()))
 categoria = st.sidebar.selectbox("Categoria", ["Todos"] + list(data['Categoria'].unique()))
 sexo = st.sidebar.selectbox("Sexo", ["Todos"] + list(data['Sexo'].unique()))
