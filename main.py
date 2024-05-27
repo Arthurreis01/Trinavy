@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 import io
 
 # Carregar dados
-data = pd.read_excel('Arquivo.xlsm')
+data = pd.read_excel('TESTE PYTHON.xlsm')
 
 # Converter 'Tempo decorrido' para timedelta
 data['Tempo decorrido'] = pd.to_timedelta(data['Tempo decorrido'].astype(str))
@@ -131,9 +131,6 @@ card_style = """
             flex-direction: column;
             align-items: flex-start;
         }
-        .card img {
-            margin-bottom: 10px;
-        }
     }
     </style>
     """
@@ -142,11 +139,7 @@ st.markdown(card_style, unsafe_allow_html=True)
 st.markdown('<div class="card-container">', unsafe_allow_html=True)
 for index, row in filtered_data.iterrows():
     tempo_formatado = str(row['Tempo decorrido']).split()[-1] if pd.notna(row['Tempo decorrido']) else "Tempo inválido"
-    image_path = row['Imagem do Atleta']  # Use the image path from the column
     st.markdown(f"""
-    <div class="card">
-        <img src="{"logobg.png"}" alt="Imagem de {row['Imagem do Atleta']}" width="100" height="100">
-        <div>
             <h4>Nome: {row['Nome do Atleta']}</h4>
             <p><strong>Classificação:</strong> {row['Classificação']}</p>
             <p><strong>Categoria:</strong> {row['Categoria']}</p>
