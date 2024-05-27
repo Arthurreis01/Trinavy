@@ -7,3 +7,9 @@ Pillow
 plotly
 plotly-express
 streamlit
+pandas
+plotly
+streamlit
+yfinance
+pandas-datareader
+prophet
