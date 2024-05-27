@@ -15,7 +15,7 @@ data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Se
 st.title("Trinavy - Simulado de Natação")
 
 # Filtros no sidebar
-st.sidebar.image("logobg.png")
+st.sidebar.image("logobg.ng.png")
 modalidade = st.sidebar.selectbox("Modalidade", list(data['Modalidade'].unique()))
 categoria = st.sidebar.selectbox("Categoria", ["Todos"] + list(data['Categoria'].unique()))
 sexo = st.sidebar.selectbox("Sexo", ["Todos"] + list(data['Sexo'].unique()))
@@ -34,7 +34,7 @@ filtered_data = filtered_data.sort_values('Tempo decorrido')
 
 def gerar_certificado(nome, tempo, categoria_pos, geral_pos, ritmo, modalidade):
     # Carregar imagem de fundo do certificado
-    img = Image.open('certificado_base.jpg')
+    img = Image.open('certificado_base.jpg.jpeg')
     draw = ImageDraw.Draw(img)
     
     # Definir fontes
