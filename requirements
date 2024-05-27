@@ -1,0 +1,9 @@
+jsonschema
+jsonschema-specifications
+numpy
+openpyxl
+pandas
+Pillow
+plotly
+plotly-express
+streamlit
