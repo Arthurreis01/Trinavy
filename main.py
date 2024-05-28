@@ -12,8 +12,8 @@ data['Tempo decorrido'] = pd.to_timedelta(data['Tempo decorrido'].astype(str))
 # Renomear colunas para facilitar o acesso (verifique se a planilha possui exatamente estas colunas)
 data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Sexo', 'Tempo decorrido', 'Modalidade']
 
-st.title("Trinavy - Simulado de Natação")
-
+st.title("Trinavy - Seu destino é a Glória!")
+st.title("Classificação - Simulado de natação")
 # Dica para a sidebar
 st.markdown("""
     <style>
@@ -95,7 +95,7 @@ for index, row in filtered_data.iterrows():
     tempo_formatado = str(row['Tempo decorrido']).split()[-1] if pd.notna(row['Tempo decorrido']) else "Tempo inválido"
     st.markdown(f"""
     <div class="card">
-        <h4>Nome: {row['Nome do Atleta']}</h4>
+        <h4>Atleta: {row['Nome do Atleta']}</h4>
         <p id="classificação"><strong>Classificação:</strong> {row['Classificação']}</p>
         <p><strong>Categoria:</strong> {row['Categoria']}</p>
         <p><strong>Sexo:</strong> {row['Sexo']}</p>
