@@ -57,7 +57,7 @@ def gerar_certificado(nome, tempo, categoria_pos, geral_pos, ritmo, modalidade):
     return buffer
 
 # Selecionar participante para gerar certificado
-nome = st.sidebar.selectbox("Selecione o participante para o certificado", filtered_data['Nome do Atleta'].unique())
+nome = st.sidebar.selectbox("Sellecione o participante para o certificado", filtered_data['Nome do Atleta'].unique())
 
 # Botão para gerar certificado
 if st.sidebar.button("Gerar Certificado"):
