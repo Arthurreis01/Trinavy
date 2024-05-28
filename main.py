@@ -19,7 +19,7 @@ st.markdown("""
     <style>
     .sidebar-tooltip {
         position: fixed;
-        top: 40px;
+        top: 50px;
         left: 10px;
         padding: 10px;
         background-color: #ffcd21;
