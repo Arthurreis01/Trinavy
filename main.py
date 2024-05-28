@@ -13,7 +13,7 @@ data['Tempo decorrido'] = pd.to_timedelta(data['Tempo decorrido'].astype(str))
 data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Sexo', 'Tempo decorrido', 'Modalidade']
 
 st.title("Trinavy - Seu Destino é a Glória!")
-st.title("Classificação - Simulado de Natação")
+st.markdown("Classificação - Simulado de Natação")
 # Dica para a sidebar
 st.markdown("""
     <style>
