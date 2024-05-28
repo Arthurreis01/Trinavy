@@ -14,6 +14,24 @@ data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Se
 
 st.title("Trinavy - Simulado de Natação")
 
+# Dica para a sidebar
+st.markdown("""
+    <style>
+    .sidebar-tooltip {
+        position: fixed;
+        top: 40px;
+        left: 10px;
+        padding: 10px;
+        background-color: #ffcd21;
+        border-radius: 5px;
+        z-index: 1000;
+        font-size: 18px;
+        color: black;
+    }
+    </style>
+    <div class="sidebar-tooltip">Clique na seta para filtrar os resultados</div>
+""", unsafe_allow_html=True)
+
 # Filtros no sidebar
 st.sidebar.image("logobg.png.png")
 modalidade = st.sidebar.selectbox("Modalidade", list(data['Modalidade'].unique()))
@@ -22,128 +40,66 @@ sexo = st.sidebar.selectbox("Sexo", ["Todos"] + list(data['Sexo'].unique()))
 
 # Aplicar filtros
 filtered_data = data.copy()
-if modalidade:
+if modalidade != "Todos":
     filtered_data = filtered_data[filtered_data['Modalidade'] == modalidade]
 if categoria != "Todos":
     filtered_data = filtered_data[filtered_data['Categoria'] == categoria]
 if sexo != "Todos":
     filtered_data = filtered_data[filtered_data['Sexo'] == sexo]
 
-# Classificar por tempo decorrido
-filtered_data = filtered_data.sort_values('Tempo decorrido')
+# Reclassificar por tempo decorrido
+filtered_data = filtered_data.sort_values('Tempo decorrido').reset_index(drop=True)
+filtered_data['Classificação'] = filtered_data.index + 1
 
-def gerar_certificado(nome, tempo, categoria_pos, geral_pos, ritmo, modalidade):
-    # Carregar imagem de fundo do certificado
-    img = Image.open('certificado_base.jpg.jpeg')
-    draw = ImageDraw.Draw(img)
-    
-    # Definir fontes
-    font_title = ImageFont.truetype('arial.ttf', 40)
-    font_text = ImageFont.truetype('arial.ttf', 20)
-    
-    # Adicionar texto ao certificado
-    draw.text((150, 200), nome, fill="yellow", font=font_title)
-    draw.text((150, 250), modalidade, fill="yellow", font=font_text)
-    draw.text((150, 300), f"Tempo: {tempo}", fill="yellow", font=font_text)
-    draw.text((150, 350), f"Posição na Categoria: {categoria_pos}", fill="yellow", font=font_text)
-    draw.text((150, 400), f"Posição Geral: {geral_pos}", fill="yellow", font=font_text)
-    draw.text((150, 450), f"Ritmo Médio: {ritmo}", fill="yellow", font=font_text)
-    
-    # Salvar certificado em um buffer
-    buffer = io.BytesIO()
-    img.save(buffer, format='JPEG')
-    buffer.seek(0)
-    
-    return buffer
 
-# Selecionar participante para gerar certificado
-nome = st.sidebar.selectbox("Sellecione o participante para o certificado", filtered_data['Nome do Atleta'].unique())
-
-# Botão para gerar certificado
-if st.sidebar.button("Gerar Certificado"):
-    participante = filtered_data[filtered_data['Nome do Atleta'] == nome].iloc[0]
-    tempo_formatado = str(participante['Tempo decorrido']).split()[-1] if pd.notna(participante['Tempo decorrido']) else "Tempo inválido"
-    buffer = gerar_certificado(participante['Nome do Atleta'], tempo_formatado, participante['Classificação'], "66/200", "1:58/100m", modalidade)
-    
-    # Simular navegação para uma nova página com parâmetros
-    st.experimental_set_query_params(certificado=True, nome=nome)
-    
-    st.success(f"Certificado gerado para {nome}!")
-    st.image(buffer, caption=f"Certificado de {nome}")
-
-# Exibir certificado se o parâmetro estiver presente
-query_params = st.experimental_get_query_params()
-if "certificado" in query_params:
-    nome = query_params["nome"][0]
-    participante = filtered_data[filtered_data['Nome do Atleta'] == nome].iloc[0]
-    tempo_formatado = str(participante['Tempo decorrido']).split()[-1] if pd.notna(participante['Tempo decorrido']) else "Tempo inválido"
-    buffer = gerar_certificado(participante['Nome do Atleta'], tempo_formatado, participante['Classificação'], "66/200", "1:58/100m", modalidade)
-    
-    st.download_button(label="Baixar Certificado", data=buffer, file_name=f'{nome}_certificado.jpg', mime='image/jpeg')
-
-# Estilizar a página
-st.markdown("""
-    <style>
-    .stApp {
-        background-color: #15354a;
-        color: #ffffff;
+# CSS para definir estilos que funcionam em ambos os modos
+css = """
+<style>
+.card {
+    border: 1px solid #666;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    color: black;  /* cor do texto padrão */
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    background-color: white; /* cor de fundo padrão */
+}
+.card h4 {
+    color: #333333;  /* cor do texto do título */
+}
+@media (prefers-color-scheme: dark) {
+    .card {
+        color: white;  /* cor do texto no modo escuro */
+        background-color: #333333;  /* cor de fundo no modo escuro */
     }
-    .css-1d391kg {
-        background-color: #ffcd21;
+    .card h4 {
+        color: #ffcd21;  /* cor do título no modo escuro */
     }
-    .css-1lcbmhc {
-        color: #ffffff;
+    #classificação {
+        color: #ffcd21;  
     }
-    .css-1d391kg {
-        width: 350px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+}
+</style>
+"""
+
+st.markdown(css, unsafe_allow_html=True)
 
 # Mostrar tabela com classificação em formato de cards
 st.subheader("Classificação")
-card_style = """
-    <style>
-    .card {
-        border: 1px solid #666;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        color: #ffffff;
-        width: calc(100% - 20px);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-    }
-    .card h4 {
-        color: #ffcd21;
-    }
-    .card-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 10px;
-    }
-    @media (max-width: 600px) {
-        .card {
-            width: calc(100% - 20px);
-        }
-    }
-    </style>
-    """
-st.markdown(card_style, unsafe_allow_html=True)
-
-st.markdown('<div class="card-container">', unsafe_allow_html=True)
 for index, row in filtered_data.iterrows():
     tempo_formatado = str(row['Tempo decorrido']).split()[-1] if pd.notna(row['Tempo decorrido']) else "Tempo inválido"
     st.markdown(f"""
     <div class="card">
         <h4>Nome: {row['Nome do Atleta']}</h4>
-        <p><strong>Classificação:</strong> {row['Classificação']}</p>
+        <p id="classificação"><strong>Classificação:</strong> {row['Classificação']}</p>
         <p><strong>Categoria:</strong> {row['Categoria']}</p>
         <p><strong>Sexo:</strong> {row['Sexo']}</p>
         <p><strong>Tempo decorrido:</strong> {tempo_formatado}</p>
         <p><strong>Modalidade:</strong> {row['Modalidade']}</p>
     </div>
     """, unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
