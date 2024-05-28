@@ -13,7 +13,7 @@ data['Tempo decorrido'] = pd.to_timedelta(data['Tempo decorrido'].astype(str))
 data.columns = ['Classificação', 'Código', 'Nome do Atleta', 'Categoria', 'Sexo', 'Tempo decorrido', 'Modalidade']
 
 st.title("Trinavy - Seu Destino é a Glória!")
-st.markdown("Classificação - Simulado de Natação")
+
 # Dica para a sidebar
 st.markdown("""
     <style>
@@ -90,7 +90,7 @@ css = """
 st.markdown(css, unsafe_allow_html=True)
 
 # Mostrar tabela com classificação em formato de cards
-st.subheader("Classificação")
+st.subheader("Classificação - Simulado de Natação")
 for index, row in filtered_data.iterrows():
     tempo_formatado = str(row['Tempo decorrido']).split()[-1] if pd.notna(row['Tempo decorrido']) else "Tempo inválido"
     st.markdown(f"""
